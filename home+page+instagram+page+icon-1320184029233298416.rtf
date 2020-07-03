@@ -1,0 +1,185 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2511
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red108\green121\blue134;\red31\green31\blue36;\red255\green255\blue255;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c42394\c47462\c52518;\csgenericrgb\c12054\c12284\c14131;\csgenericrgb\c100000\c100000\c100000\c85000;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab692
+\pard\tx692\pardeftab692\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 //    fileprivate func fetchPostOfFollowing ()\{\cf4 \
+\cf2 //\cf4 \
+\cf2 //        guard let uid = Auth.auth().currentUser?.uid else \{return\}\cf4 \
+\cf2 //        let ref = Database.database().reference().child("following").child(uid)\cf4 \
+\cf2 //        ref.observeSingleEvent(of: .value, with: \{ (dataSnapShot) in\cf4 \
+\cf2 //            guard let otherUsersPost = dataSnapShot.value as? [String : Int] else \{return\}\cf4 \
+\cf2 //            otherUsersPost.forEach \{ (key,value) in\cf4 \
+\cf2 //                FirebaseApp.fetchUsetWithUid(id: key) \{ (user) in\cf4 \
+\cf2 //                    self.fetchUserRelatedPost(user: user)\cf4 \
+\cf2 //                \}\cf4 \
+\cf2 //            \}\cf4 \
+\cf2 //\cf4 \
+\cf2 //        \}) \{ (error) in\cf4 \
+\cf2 //            print("There is an error in fetching the data of other following users Posts \\(error.localizedDescription)")\cf4 \
+\cf2 //        \}\cf4 \
+\cf2 //\cf4 \
+\cf2 //\cf4 \
+\cf2 //    \}\
+\
+\
+\
+//    fileprivate func fetchUserRelatedPost(user : UserData)\{\cf4 \
+\cf2 //        let ref = Database.database().reference().child("posts").child(user.uid).queryOrdered(byChild: "creationData")\cf4 \
+\cf2 //        ref.observeSingleEvent(of: .value, with: \{ (dataSnapShot) in\cf4 \
+\cf2 //            self.collectionView.refreshControl?.endRefreshing()\cf4 \
+\cf2 //\cf4 \
+\cf2 //            guard  let dictionaries = dataSnapShot.value as? [String : Any] else \{return\}\cf4 \
+\cf2 //\cf4 \
+\cf2 //\cf4 \
+\cf2 //            dictionaries.forEach \{ (key,value) in\cf4 \
+\cf2 //\cf4 \
+\cf2 //                guard let dic = value as? [String : Any] else \{return\}\cf4 \
+\cf2 //                let post = PostsData(UserData: user, Data: dic )\cf4 \
+\cf2 //                self.posts.insert(post, at: 0)\cf4 \
+\cf2 //            \}\cf4 \
+\cf2 //\cf4 \
+\cf2 //            self.posts.sort \{ (p1, p2) -> Bool in\cf4 \
+\cf2 //                return p1.postDate.compare(p2.postDate) == .orderedDescending\cf4 \
+\cf2 //            \}\cf4 \
+\cf2 //            DispatchQueue.main.async \{\cf4 \
+\cf2 //\cf4 \
+\cf2 //                self.collectionView?.reloadData()\cf4 \
+\cf2 //\cf4 \
+\cf2 //            \}\cf4 \
+\cf2 //\cf4 \
+\cf2 //\cf4 \
+\cf2 //\cf4 \
+\cf2 //        \}) \{ (error) in\cf4 \
+\cf2 //            print("Ther is an error in fetching the Posts from Database : \\(error.localizedDescription)")\cf4 \
+\cf2 //        \}\cf4 \
+\cf2 //\cf4 \
+\cf2 //    \}\cf4 \
+\cf2 //\
+\
+\
+//////alll\
+\pard\tx642\pardeftab642\pardirnatural\partightenfactor0
+
+\fs26 \cf4 \cb3  \
+    \cf2 //    fileprivate func fetchaAllPostEvenFollowing(userdata : UserData ) \{\cf4 \
+    \cf2 //        let ref = Database.database().reference().child("posts").child(userdata.uid)\cf4 \
+    \cf2 //        ref.observeSingleEvent(of: .value, with: \{ (dataSnapShot) in\cf4 \
+    \cf2 //            self.collectionView.refreshControl?.endRefreshing()\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            guard  let dictionaries = dataSnapShot.value as? [String : Any] else \{self.refreshData();return\}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            dictionaries.forEach \{ (key,value) in\cf4 \
+    \cf2 //                //my logic\cf4 \
+    \cf2 //                guard let userCurrentID = Auth.auth().currentUser?.uid else \{return\}\cf4 \
+    \cf2 //                let likeState = Database.database().reference().child("likes").child(key).child(userCurrentID)\cf4 \
+    \cf2 //                likeState.observeSingleEvent(of: .value, with: \{ (dataSnap) in\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    guard let dic = value as? [String : Any] else \{return\}\cf4 \
+    \cf2 //                    var post = PostsData(UserData: userdata, Data: dic )\cf4 \
+    \cf2 //                    if let  likeValue = dataSnap.value as? Int,  likeValue == 1 \{\cf4 \
+    \cf2 //                        post.liked = true\cf4 \
+    \cf2 //                    \}else\{\cf4 \
+    \cf2 //                        post.liked = false\cf4 \
+    \cf2 //                    \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    post.postId = key\cf4 \
+    \cf2 //                    self.posts.insert(post, at: 0)\cf4 \
+    \cf2 //                \}) \{ (error) in\cf4 \
+    \cf2 //                    print("There is an error in retrive Data Of Liked posts : \\(error.localizedDescription)")\cf4 \
+    \cf2 //                    return\cf4 \
+    \cf2 //                \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //            \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        \}) \{ (error) in\cf4 \
+    \cf2 //            print("Ther is an error in fetching the Posts from Database : \\(error.localizedDescription)")\cf4 \
+    \cf2 //        \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        guard let uid = Auth.auth().currentUser?.uid else \{return\}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        let check = Database.database().reference().child("following").child(uid)\cf4 \
+    \cf2 //        check.observeSingleEvent(of: .value, with: \{ (dataSnapShot) in\cf4 \
+    \cf2 //            guard let otherUsersPost = dataSnapShot.value as? [String : Int] else \{self.refreshData();return\}\cf4 \
+    \cf2 //            otherUsersPost.forEach \{ (key,value) in\cf4 \
+    \cf2 //                FirebaseApp.fetchUsetWithUid(id: key) \{ (user) in\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    let again = Database.database().reference().child("posts").child(user.uid)\cf4 \
+    \cf2 //                    again.observeSingleEvent(of: .value, with: \{ (dataSnapShot) in\cf4 \
+    \cf2 //                        self.collectionView.refreshControl?.endRefreshing()\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                        guard  let dictionaries = dataSnapShot.value as? [String : Any] else \{self.refreshData();return\}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                        dictionaries.forEach \{ (key,value) in\cf4 \
+    \cf2 //                            //\cf4 \
+    \cf2 //                            //\cf4 \
+    \cf2 //                            guard let dic = value as? [String : Any] else \{return\}\cf4 \
+    \cf2 //                            var post = PostsData(UserData: user, Data: dic )\cf4 \
+    \cf2 //                            post.postId = key\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                            ////logic 2\cf4 \
+    \cf2 //                            guard let userCurrentID = Auth.auth().currentUser?.uid else \{return\}\cf4 \
+    \cf2 //                            let likeState = Database.database().reference().child("likes").child(key).child(userCurrentID)\cf4 \
+    \cf2 //                            likeState.observeSingleEvent(of: .value, with: \{ (dataSnap) in\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                                if let  likeValue = dataSnap.value as? Int,  likeValue == 1 \{\cf4 \
+    \cf2 //                                    post.liked = true\cf4 \
+    \cf2 //                                \}else\{\cf4 \
+    \cf2 //                                    post.liked = false\cf4 \
+    \cf2 //                                \}\cf4 \
+    \cf2 //                                self.posts.insert(post, at: 0)\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                                self.refreshData()\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                            \}) \{ (error) in\cf4 \
+    \cf2 //                                print("There is an error in retrive Data Of Liked posts : \\(error.localizedDescription)")\cf4 \
+    \cf2 //                                return\cf4 \
+    \cf2 //                            \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                        \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                    \}) \{ (error) in\cf4 \
+    \cf2 //                        print("Ther is an error in fetching the Posts from Database : \\(error.localizedDescription)")\cf4 \
+    \cf2 //                    \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //                \}\cf4 \
+    \cf2 //            \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //        \}) \{ (error) in\cf4 \
+    \cf2 //            print("There is an error in fetching the data of other following users Posts \\(error.localizedDescription)")\cf4 \
+    \cf2 //        \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //    \}\cf4 \
+    \cf2 //\cf4 \
+    \cf2 //\cf4 \
+    
+\fs28 \cf2 \cb3 \
+}
